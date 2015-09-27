@@ -28,9 +28,9 @@ RUN \
 
 # Asterisk and dependencies install
 RUN \
-	wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2 && \
-	tar -xjf pjproject-2.3.tar.bz2 && \
-	cd pjproject-2.3 && \
+	wget http://www.pjsip.org/release/2.4.5/pjproject-2.4.5.tar.bz2 && \
+	tar -xjf pjproject-2.4.5.tar.bz2 && \
+	cd pjproject-2.4.5 && \
 	./configure --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG' && \
 	make dep && \
 	make && \
@@ -40,9 +40,9 @@ RUN \
 	cd .. && \
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
-	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/certified-asterisk-13.1-cert2.tar.gz && \
-	tar -xzf certified-asterisk-13.1-cert2.tar.gz && \
-	cd certified-asterisk-13.1-cert2 && \
+	wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-13.5.0.tar.gz && \
+	tar -xzf asterisk-13.5.0.tar.gz && \
+	cd asterisk-13.5.0 && \
 	./configure && \
 	make menuselect.makeopts && \
 	make && \
