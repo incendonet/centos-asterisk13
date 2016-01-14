@@ -45,6 +45,15 @@ RUN \
 	cd asterisk-13.5.0 && \
 	./configure && \
 	make menuselect.makeopts && \
+	menuselect/menuselect && \
+		--disable-category MENUSELECT_ADDONS && \
+		--disable-category MENUSELECT_CORE_SOUNDS && \
+		--disable-category MENUSELECT_MOH && \
+		--disable-category MENUSELECT_EXTRA_SOUNDS && \
+		--disable-category MENUSELECT_AGIS && \
+		--disable-category MENUSELECT_TESTS && \
+		--enable chan_pjsip && \
+			menuselect.makeopts && \
 	make && \
 	make install && \
 	ldconfig && \
