@@ -44,7 +44,16 @@ RUN \
 	tar -xzf certified-asterisk-13.1-cert2.tar.gz && \
 	cd certified-asterisk-13.1-cert2 && \
 	./configure && \
+
 	make menuselect.makeopts && \
+	menuselect/menuselect \
+		--disable-category MENUSELECT_ADDONS \
+		--disable-category MENUSELECT_MOH \
+		--disable-category MENUSELECT_EXTRA_SOUNDS \
+		--disable-category MENUSELECT_AGIS \
+		--disable-category MENUSELECT_TESTS \
+		--enable chan_pjsip \
+			menuselect.makeopts && \
 	make && \
 	make install && \
 	ldconfig && \
@@ -62,3 +71,4 @@ RUN \
 EXPOSE \
 	5060-5061 \
 	10000-10999
+
