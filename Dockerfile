@@ -28,9 +28,9 @@ RUN \
 
 # Asterisk and dependencies install
 RUN \
-	wget http://www.pjsip.org/release/2.3/pjproject-2.3.tar.bz2 && \
-	tar -xjf pjproject-2.3.tar.bz2 && \
-	cd pjproject-2.3 && \
+	wget http://www.pjsip.org/release/2.4.5/pjproject-2.4.5.tar.bz2 && \
+	tar -xjf pjproject-2.4.5.tar.bz2 && \
+	cd pjproject-2.4.5 && \
 	./configure --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG' && \
 	make dep && \
 	make && \
