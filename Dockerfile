@@ -41,8 +41,8 @@ RUN \
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
 	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-certified-13.1-cert4.tar.gz && \
-	tar -xzf certified-asterisk-13.1-cert2.tar.gz && \
-	cd certified-asterisk-13.1-cert2 && \
+	tar -xzf asterisk-certified-13.1-cert4.tar.gz && \
+	cd asterisk-certified-13.1-cert4 && \
 	./configure && \
 
 	make menuselect.makeopts && \
