@@ -40,7 +40,7 @@ RUN \
 	cd .. && \
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
-	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/certified-asterisk-13.1-cert2.tar.gz && \
+	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-certified-13.1-cert4.tar.gz && \
 	tar -xzf certified-asterisk-13.1-cert2.tar.gz && \
 	cd certified-asterisk-13.1-cert2 && \
 	./configure && \
