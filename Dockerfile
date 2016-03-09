@@ -52,6 +52,7 @@ RUN \
 		--disable-category MENUSELECT_EXTRA_SOUNDS \
 		--disable-category MENUSELECT_AGIS \
 		--disable-category MENUSELECT_TESTS \
+		--disable BUILD_NATIVE \
 		--enable chan_pjsip \
 			menuselect.makeopts && \
 	make && \
