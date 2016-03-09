@@ -24,7 +24,8 @@ RUN \
 		sqlite-devel \
 		tar \
 		uuid-devel \
-		wget
+		wget \
+		yum clean all
 
 # Asterisk and dependencies install
 RUN \
