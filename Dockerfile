@@ -24,8 +24,8 @@ RUN \
 		sqlite-devel \
 		tar \
 		uuid-devel \
-		wget \
-		yum clean all
+		wget && \
+	yum clean all
 
 # Asterisk and dependencies install
 RUN \
@@ -65,12 +65,12 @@ RUN \
 	cd .. && \
 
 	# Cleanup
-	rm -Rf jansson* &&\
-	rm -Rf pjproject* &&\
-	rm -Rf asterisk* &&\
+	rm -Rf pjproject* && \
+	rm -Rf asterisk* && \
 	rm -f *.tar.*
 
 EXPOSE \
 	5060-5061 \
 	10000-10999
 
+CMD ["/usr/sbin/asterisk", "-cv"]
