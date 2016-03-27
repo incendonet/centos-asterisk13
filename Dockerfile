@@ -57,6 +57,7 @@ RUN \
 	./configure && \
 
 	make menuselect.makeopts && \
+<<<<<<< HEAD
 	menuselect/menuselect \
 		--disable-category MENUSELECT_ADDONS \
 		--disable-category MENUSELECT_MOH \
@@ -65,6 +66,16 @@ RUN \
 		--disable-category MENUSELECT_TESTS \
 		--disable BUILD_NATIVE \
 		--enable chan_pjsip \
+=======
+	menuselect/menuselect && \
+		--disable-category MENUSELECT_ADDONS && \
+		--disable-category MENUSELECT_CORE_SOUNDS && \
+		--disable-category MENUSELECT_MOH && \
+		--disable-category MENUSELECT_EXTRA_SOUNDS && \
+		--disable-category MENUSELECT_AGIS && \
+		--disable-category MENUSELECT_TESTS && \
+		--enable chan_pjsip && \
+>>>>>>> c2b9ac76c173dbdfef16b9602942b7f9cd74d299
 			menuselect.makeopts && \
 	make && \
 	make install && \
