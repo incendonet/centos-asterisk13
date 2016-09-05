@@ -1,59 +1,78 @@
-# This Dockerfile is derived from https://github.com/grpc/grpc-docker-library/blob/master/0.10/cxx/Dockerfile
-# (which is the most recent at this time), mainly CentOS-ifying it and upping the version.
-# Please see original copyright notice following the build instructions.
+# Base OS
+FROM centos:centos6
+MAINTAINER bryanayers+Dockerfile@gmail.com
 
-FROM centos:7
+# Env setup
+ENV HOME /root
+WORKDIR ~/
 
-RUN yum -y update; yum clean all
-RUN yum -y install epel-release
+# Build deps
 RUN \
-#	yum -y groupinstall "Development Tools" &&\
+	yum -y update && \
+	yum -y install epel-release &&\
 	yum -y install \
 		autoconf \
 		automake \
-		curl \
-		gcc \
+		bzip2 \
 		gcc-c++ \
-		gflags-devel \
-		git \
-		glib2-devel \
-		glibc-common \
-		glibc-devel \
-		gtest-devel \
+		jansson-devel \
 		libtool \
+		libuuid-devel \
+		libxml2-devel \
+		ncurses-devel \
 		make \
-		unzip \
-		wget \
-		which \
-		xz-devel \
-		zlib-devel &&\
+		sqlite-devel \
+		tar \
+		uuid-devel \
+		wget && \
 	yum clean all
 
-# Install protoc 3.0.0
-ENV PROTOC_RELEASE_TAG 3.0.0
-
+# Asterisk and dependencies install
+ENV PJSIP_RELEASE 2.5.5
+ENV ASTERISK_RELEASE certified-13.8-cert2
 RUN \
-	wget https://github.com/google/protobuf/releases/download/v3.0.0/protoc-${PROTOC_RELEASE_TAG}-linux-x86_64.zip &&\
-	unzip protoc-${PROTOC_RELEASE_TAG}-linux-x86_64.zip -d /usr/local &&\
-	rm -f protoc-${PROTOC_RELEASE_TAG}-linux-x86_64.zip
+	wget http://www.pjsip.org/release/${PJSIP_RELEASE}/pjproject-${PJSIP_RELEASE}.tar.bz2 && \
+	tar -xjf pjproject-${PJSIP_RELEASE}.tar.bz2 && \
+	cd pjproject-${PJSIP_RELEASE} && \
+	./configure --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG -mtune=generic' && \
+	make dep && \
+	make && \
+	make install && \
+	ldconfig && \
+	#ldconfig -p | grep pj && \
+	cd .. && \
+	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
-# Build grpc
-ENV GRPC_RELEASE_TAG v1.0.0
+	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE}.tar.gz && \
+	tar -xzf asterisk-${ASTERISK_RELEASE}.tar.gz && \
+	cd asterisk-${ASTERISK_RELEASE} && \
+	./configure && \
 
-RUN git clone https://github.com/grpc/grpc.git /usr/local/src/grpc
-RUN \
-	cd /usr/local/src/grpc &&\
-	git checkout tags/${GRPC_RELEASE_TAG} &&\
-	git submodule update --init --recursive
+	make menuselect.makeopts && \
+	menuselect/menuselect \
+		--disable-category MENUSELECT_ADDONS \
+		--disable-category MENUSELECT_MOH \
+		--disable-category MENUSELECT_EXTRA_SOUNDS \
+		--disable-category MENUSELECT_AGIS \
+		--disable-category MENUSELECT_TESTS \
+		--disable BUILD_NATIVE \
+		--enable chan_pjsip \
+			menuselect.makeopts && \
+	make && \
+	make install && \
+	ldconfig && \
+	#ldconfig -p | grep libast && \
+	#make samples && \
+	rm -Rf /etc/asterisk && \
+	cd .. && \
 
-RUN \
-	cd /usr/local/src/grpc/third_party/protobuf &&\
-	./autogen.sh &&\
-	./configure --prefix=/usr &&\
-	make -j12 && make check && make install && make clean
+	# Cleanup
+	rm -Rf pjproject* && \
+	rm -Rf asterisk* && \
+	rm -f *.tar.*
 
-RUN cd /usr/local/src/grpc && make install
+EXPOSE \
+	5060-5061 \
+	10000-10999
 
-
-
-# Copyright 2015, Google Inc. # All rights reserved. # # Redistribution and use in source and binary forms, with or without # modification, are permitted provided that the following conditions are # met: # #     * Redistributions of source code must retain the above copyright # notice, this list of conditions and the following disclaimer. #     * Redistributions in binary form must reproduce the above # copyright notice, this list of conditions and the following disclaimer # in the documentation and/or other materials provided with the # distribution. #     * Neither the name of Google Inc. nor the names of its # contributors may be used to endorse or promote products derived from # this software without specific prior written permission. # # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+CMD ["/usr/sbin/asterisk", "-cv"]

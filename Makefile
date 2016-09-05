@@ -1,4 +1,3 @@
 
 build:
-	docker build -t centos7-grpc-cxx:1.0.0 -f Dockerfile .
-
+	docker build -t centos6-asterisk13:13.8cert2 -f Dockerfile .
