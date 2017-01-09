@@ -29,7 +29,7 @@ RUN \
 
 # Asterisk and dependencies install
 ENV PJSIP_RELEASE 2.5.5
-ENV ASTERISK_RELEASE certified-13.8-cert3
+ENV ASTERISK_RELEASE certified-13.8-cert4
 RUN \
 	wget http://www.pjsip.org/release/${PJSIP_RELEASE}/pjproject-${PJSIP_RELEASE}.tar.bz2 && \
 	tar -xjf pjproject-${PJSIP_RELEASE}.tar.bz2 && \
