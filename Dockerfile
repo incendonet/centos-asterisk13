@@ -4,7 +4,7 @@ MAINTAINER info@incendonet.com
 
 # Env setup
 ENV HOME /root
-ENV ASTERISK_RELEASE certified-13.13-cert1
+ENV ASTERISK_RELEASE certified-13.13-cert2
 ENV PJSIP_RELEASE 2.5.5
 WORKDIR ~/
 
