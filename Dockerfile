@@ -34,7 +34,7 @@ RUN \
 	wget http://www.pjsip.org/release/${PJSIP_RELEASE}/pjproject-${PJSIP_RELEASE}.tar.bz2 && \
 	tar -xjf pjproject-${PJSIP_RELEASE}.tar.bz2 && \
 	cd pjproject-${PJSIP_RELEASE} && \
-	./configure --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG -mtune=generic' && \
+	./configure --prefix=/usr/local --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG -mtune=generic' && \
 	make dep && \
 	make && \
 	make install && \
@@ -46,7 +46,7 @@ RUN \
 	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE}.tar.gz && \
 	tar -xzf asterisk-${ASTERISK_RELEASE}.tar.gz && \
 	cd asterisk-${ASTERISK_RELEASE} && \
-	./configure && \
+	./configure --prefix=/usr/local && \
 
 	make menuselect.makeopts && \
 	menuselect/menuselect \
