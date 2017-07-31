@@ -75,4 +75,4 @@ EXPOSE \
 	5060-5061 \
 	10000-10999
 
-CMD ["/usr/sbin/asterisk", "-cv"]
+CMD ["/usr/local/sbin/asterisk", "-cv"]
