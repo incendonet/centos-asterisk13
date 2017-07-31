@@ -56,6 +56,8 @@ RUN \
 		--disable-category MENUSELECT_AGIS \
 		--disable-category MENUSELECT_TESTS \
 		--disable BUILD_NATIVE \
+		--disable CORE-SOUNDS-EN-GSM \
+		--enable CORE-SOUNDS-EN-ULAW \
 		--enable chan_pjsip \
 			menuselect.makeopts && \
 	make && \
