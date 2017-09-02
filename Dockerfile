@@ -4,8 +4,14 @@ MAINTAINER info@incendonet.com
 
 # Env setup
 ENV HOME /root
-ENV ASTERISK_RELEASE certified-13.13-cert4
+ENV ASTERISK_RELEASE_PREFIX certified-
 ENV PJSIP_RELEASE 2.5.5
+
+# Args passed in (won't work with Docker Hub automated builds)
+# ARG IMAGE_TAG_FINAL
+
+ENV IMAGE_TAG_FINAL 13.13-cert5
+
 WORKDIR ~/
 
 # Build deps
@@ -34,7 +40,7 @@ RUN \
 	wget http://www.pjsip.org/release/${PJSIP_RELEASE}/pjproject-${PJSIP_RELEASE}.tar.bz2 && \
 	tar -xjf pjproject-${PJSIP_RELEASE}.tar.bz2 && \
 	cd pjproject-${PJSIP_RELEASE} && \
-	./configure --prefix=/usr --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG -mtune=generic' && \
+	./configure --prefix=/usr/local --enable-shared --disable-sound --disable-resample --disable-video --disable-opencore-amr CFLAGS='-O2 -DNDEBUG -mtune=generic' && \
 	make dep && \
 	make && \
 	make install && \
@@ -43,10 +49,10 @@ RUN \
 	cd .. && \
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
-	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE}.tar.gz && \
-	tar -xzf asterisk-${ASTERISK_RELEASE}.tar.gz && \
-	cd asterisk-${ASTERISK_RELEASE} && \
-	./configure && \
+	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL}.tar.gz && \
+	tar -xzf asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL}.tar.gz && \
+	cd asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL} && \
+	./configure --prefix=/usr/local && \
 
 	make menuselect.makeopts && \
 	menuselect/menuselect \
@@ -56,6 +62,8 @@ RUN \
 		--disable-category MENUSELECT_AGIS \
 		--disable-category MENUSELECT_TESTS \
 		--disable BUILD_NATIVE \
+		--disable CORE-SOUNDS-EN-GSM \
+		--enable CORE-SOUNDS-EN-ULAW \
 		--enable chan_pjsip \
 			menuselect.makeopts && \
 	make && \
@@ -75,4 +83,4 @@ EXPOSE \
 	5060-5061 \
 	10000-10999
 
-CMD ["/usr/sbin/asterisk", "-cv"]
+CMD ["/usr/local/sbin/asterisk", "-cv"]
