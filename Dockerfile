@@ -4,8 +4,14 @@ MAINTAINER info@incendonet.com
 
 # Env setup
 ENV HOME /root
-ENV ASTERISK_RELEASE certified-13.13-cert4
+ENV ASTERISK_RELEASE_PREFIX certified-
 ENV PJSIP_RELEASE 2.5.5
+
+# Args passed in (won't work with Docker Hub automated builds)
+# ARG IMAGE_TAG_FINAL
+
+ENV IMAGE_TAG_FINAL 13.13-cert5
+
 WORKDIR ~/
 
 # Build deps
@@ -43,9 +49,9 @@ RUN \
 	cd .. && \
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig && \
 
-	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE}.tar.gz && \
-	tar -xzf asterisk-${ASTERISK_RELEASE}.tar.gz && \
-	cd asterisk-${ASTERISK_RELEASE} && \
+	wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL}.tar.gz && \
+	tar -xzf asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL}.tar.gz && \
+	cd asterisk-${ASTERISK_RELEASE_PREFIX}${IMAGE_TAG_FINAL} && \
 	./configure --prefix=/usr/local && \
 
 	make menuselect.makeopts && \
